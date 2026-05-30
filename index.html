@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartera de Campo Digital · Res. 643 de 2018 (IGAC)</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1a1d21;
+    --paper:#f4f1ea;
+    --line:#cdd5d8;
+    --accent:#d9480f;       /* naranja de equipo topográfico */
+    --accent-d:#a63a0c;
+    --steel:#2f4858;        /* azul acero */
+    --steel-l:#3d5a6c;
+    --ok:#2b8a3e;
+    --grid:#dfe6e9;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family:'IBM Plex Sans',system-ui,sans-serif;
+    color:var(--ink);
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:22px 22px;
+    margin:0;
+    padding-bottom:60px;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .num input, input.num{font-family:'IBM Plex Mono',monospace;}
+
+  /* Encabezado */
+  .topbar{
+    background:var(--steel);
+    color:#fff;
+    border-bottom:4px solid var(--accent);
+    box-shadow:0 2px 10px rgba(0,0,0,.18);
+  }
+  .topbar .brand-mark{
+    width:42px;height:42px;border-radius:6px;
+    background:var(--accent);
+    display:grid;place-items:center;
+    font-weight:700;font-size:.7rem;letter-spacing:.5px;
+    color:#fff;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.25);
+  }
+  .topbar h1{font-size:1.05rem;font-weight:700;margin:0;line-height:1.1;}
+  .topbar small{color:#b9c6cd;font-weight:500;letter-spacing:.3px;}
+  .res-badge{
+    font-family:'IBM Plex Mono',monospace;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:4px;padding:.2rem .5rem;font-size:.72rem;
+  }
+
+  /* Tabs */
+  .nav-pills{gap:.35rem;}
+  .nav-pills .nav-link{
+    color:var(--steel);font-weight:600;border-radius:6px;
+    border:1px solid var(--line);background:#fff;font-size:.86rem;
+    display:flex;align-items:center;gap:.4rem;
+  }
+  .nav-pills .nav-link.active{background:var(--steel);color:#fff;border-color:var(--steel);}
+  .nav-pills .nav-link .badge{font-family:'IBM Plex Mono',monospace;}
+
+  .panel{
+    background:#fff;border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 4px 14px rgba(47,72,88,.07);
+  }
+  .panel-head{
+    border-bottom:1px solid var(--line);
+    padding:.85rem 1.1rem;display:flex;align-items:center;gap:.6rem;
+    background:linear-gradient(#fff,#fafaf7);
+    border-radius:10px 10px 0 0;
+  }
+  .panel-head .ix{
+    width:30px;height:30px;border-radius:6px;background:var(--steel);
+    color:#fff;display:grid;place-items:center;font-size:1rem;flex:0 0 auto;
+  }
+  .panel-head h2{font-size:.98rem;font-weight:700;margin:0;}
+  .panel-head .sub{font-size:.76rem;color:#6b7780;}
+  .panel-body{padding:1.1rem;}
+
+  .form-label{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--steel);margin-bottom:.2rem;}
+  .form-control,.form-select{font-size:.88rem;border-color:var(--line);}
+  .form-control:focus,.form-select:focus{border-color:var(--accent);box-shadow:0 0 0 .2rem rgba(217,72,15,.15);}
+  .hint{font-size:.7rem;color:#8a949b;margin-top:.15rem;display:block;}
+  .section-tag{
+    font-size:.7rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+    color:var(--accent-d);border-left:3px solid var(--accent);padding-left:.5rem;margin:.4rem 0 .8rem;
+  }
+
+  /* Botones */
+  .btn-accent{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+  .btn-accent:hover{background:var(--accent-d);border-color:var(--accent-d);color:#fff;}
+  .btn-steel{background:var(--steel);border-color:var(--steel);color:#fff;font-weight:600;}
+  .btn-steel:hover{background:var(--steel-l);border-color:var(--steel-l);color:#fff;}
+  .btn-outline-steel{color:var(--steel);border-color:var(--steel);font-weight:600;font-size:.82rem;}
+  .btn-outline-steel:hover{background:var(--steel);color:#fff;}
+  .btn-check:checked+.btn-outline-steel{background:var(--steel);color:#fff;border-color:var(--steel);}
+
+  /* Tablas de puntos */
+  .tbl-pts{font-size:.78rem;}
+  .tbl-pts thead th{
+    background:var(--steel);color:#fff;font-weight:600;font-size:.7rem;
+    text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;vertical-align:middle;
+  }
+  .tbl-pts td{font-family:'IBM Plex Mono',monospace;vertical-align:middle;white-space:nowrap;}
+  .tbl-pts tbody tr:hover{background:#fff7f3;}
+  .type-pill{font-size:.66rem;font-weight:600;padding:.12rem .4rem;border-radius:20px;}
+  .empty-state{text-align:center;color:#9aa4ab;padding:2.2rem 1rem;}
+  .empty-state i{font-size:2rem;opacity:.5;}
+
+  .stat-chip{
+    background:#fff;border:1px solid var(--line);border-radius:8px;padding:.5rem .8rem;
+    display:flex;align-items:center;gap:.55rem;
+  }
+  .stat-chip .n{font-family:'IBM Plex Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--accent-d);line-height:1;}
+  .stat-chip .l{font-size:.7rem;color:var(--steel);text-transform:uppercase;letter-spacing:.4px;font-weight:600;}
+
+  .toast-mini{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--steel);color:#fff;padding:.7rem 1.2rem;border-radius:8px;
+    font-size:.85rem;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.25);
+    opacity:0;pointer-events:none;transition:.3s;z-index:1080;border-left:4px solid var(--accent);
+  }
+  .toast-mini.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  fieldset legend{font-size:.8rem;font-weight:700;color:var(--steel);float:none;width:auto;}
+  .req::after{content:" *";color:var(--accent);}
+
+  .logo-plate{flex:0 0 auto;display:flex;align-items:center;}
+  .logo-plate img{height:48px;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3));}
+  .credit-top{font-size:.7rem;color:#9fb0b8;font-style:italic;margin-top:2px;letter-spacing:.2px;}
+  .app-footer{
+    text-align:center;color:#6b7780;font-size:.78rem;margin-top:34px;padding:18px 12px;
+    border-top:1px solid var(--line);
+  }
+  .app-footer strong{color:var(--steel);}
+</style>
+</head>
+<body>
+
+<!-- ENCABEZADO -->
+<header class="topbar py-2 mb-3">
+  <div class="container-fluid px-3">
+    <div class="d-flex align-items-center gap-3">
+      <div class="logo-plate"><img src="data:image/png;base64,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z8dWzI2IiAIjYk6hpRjxOJ0n1qUFTFszT2hXjdVM3wR+awKMuIxGXyQckqnSeo6wCj3D9b2q2lcBvke75lVExLxCdEnNbRwrVsU6YjksFothqbIiFgoj1GdQVNQrxNgrAQvDZ8Ym8D/qWUngb+izvihKGfdvKQFRVX3Qn/89klVEtDAi5jvWFeGylgiS1ZVgWU19v0Rds0T+Dgc096TAgsgSEHmCwhT8pgwx6+uSgCBM1f0qniD5AvAB7L5GREQUGBERPYLb0Hab3qvT3tR23w3J/xURPG5z233nrqtgN8nLCIyp/E3l5drdAh4BHgJuAu6N0xoRBUZEREREREQBYh5GREREREQUGBERERERUWBERERERESBERERERERBUZERERERBQYERERERFRYERERERERESBERERERERBUZERERERBQYERERERFRYERERERERIEREREREREFRkREREREFBgRERERERFRYERERERERIEREREREREFRkREREREFBgREREREVFgREREREREgREREREREQVGREREREREFBgREREREVFgREREREREgREREREREQVGRERERMSAohaHYNLYHtgF2BRYIq81gHWBxwELgQbwGLACuEfePwgsB/4JXAXcHodyTmILYHdgc2AxsD6wGrAWsDawCEiAMXmtBB4BHgbuBH4O/AS4Lw5lxKAgMcYY7zP//yTj866fVfIe7rrQX93GFUAdqMrffmMtYF/g5SIo1pHPU6CphG8SaKvJsOYM8Hvgp8AFwE0zTA/fkv7hjfkKYXD9xL+EWf4VuB/4D3AlcMssWk/7AK8FdgM2VnPeUrSRZdWPAiPyvqFo+gGhkV8BFwG/m6W85ofAjrKOUnlVFE8o8nY01Zi4364ArgZeMkN92ga4WZRDM0l+VxZGFM0HvdfDoojeLmP8734LjDFgaBYQ3CpgQeA9HoPuJRYLAzgY2BkYVs9KlSDQz0/V+4r3eSXw3jGTqmiYVwPfBL4/A2P8E+A5wrCqovkuUO0sEuR4wiZP4Pvf10TLXuiN0QMiOL4L/ECN16DgIOBlwPOB1TPmlQB9pJ5yUfEUDyP30NeMiVJxrgiP8VkkMIr4TFqCYVYVbbpxXi6W20wJjD+WaHsvUPHGydFFKnRSk7H5G/A94HxRvvpiYThCNRkav7Yw8iyAIkbSLWPxn9tSC9Bp9kN9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" alt="TopCad"></div>
+      <div class="flex-grow-1">
+        <h1>Cartera de Campo Digital</h1>
+        <small>Levantamiento planimétrico predial — GNSS y equipos ópticos</small>
+        <div class="credit-top">Creado por Carlos M. Gutiérrez G.</div>
+      </div>
+      <span class="res-badge d-none d-md-inline">RES. 643 / 2018 · IGAC</span>
+    </div>
+  </div>
+</header>
+
+<div class="container-fluid px-3" style="max-width:1180px;">
+
+  <!-- NAVEGACIÓN -->
+  <ul class="nav nav-pills mb-3 flex-wrap" id="tabs" role="tablist">
+    <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#t-gnss"><i class="bi bi-broadcast-pin"></i> Cartera GNSS <span class="badge bg-light text-dark" id="cntGnss">0</span></button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#t-opt"><i class="bi bi-bullseye"></i> Cartera óptica <span class="badge bg-light text-dark" id="cntOpt">0</span></button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#t-exp"><i class="bi bi-file-earmark-word"></i> Exportar / Guardar</button></li>
+  </ul>
+
+  <div class="tab-content">
+
+  <!-- ============ DATOS GENERALES ============ -->
+  <!-- ============ CARTERA GNSS ============ -->
+  <div class="tab-pane fade show active" id="t-gnss">
+    <div class="panel mb-3">
+      <div class="panel-head"><div class="ix"><i class="bi bi-broadcast-pin"></i></div>
+        <div><h2>Cartera GNSS</h2><div class="sub">Captura por receptor satelital · puntos de control, lindero y detalle</div></div>
+      </div>
+      <div class="panel-body">
+        <div class="section-tag">Equipo y método</div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-4"><label class="form-label">Receptor (marca/modelo)</label><input type="text" class="form-control" id="ge_equipo"></div>
+          <div class="col-md-3"><label class="form-label">Serie</label><input type="text" class="form-control mono" id="ge_serie"></div>
+          <div class="col-md-2"><label class="form-label">Método</label>
+            <select class="form-select" id="ge_metodo"><option>RTK</option><option>PPK</option><option>Estático</option><option>Estático rápido</option><option>DGPS</option></select>
+          </div>
+          <div class="col-md-3"><label class="form-label">Estación base / NTRIP</label><input type="text" class="form-control" id="ge_base"></div>
+        </div>
+
+        <div class="section-tag">Nuevo punto</div>
+        <div class="row g-2">
+          <div class="col-6 col-md-2"><label class="form-label req">ID punto</label><input type="text" class="form-control num" id="p_id"></div>
+          <div class="col-6 col-md-3"><label class="form-label">Tipo</label>
+            <select class="form-select" id="p_tipo">
+              <option>Punto lindero</option><option>Punto de control / base</option>
+              <option>Vértice de referencia</option><option>Punto de detalle</option><option>Construcción</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-2"><label class="form-label">Altura antena (m)</label><input type="number" step="0.001" class="form-control num" id="p_ha"></div>
+          <div class="col-6 col-md-2"><label class="form-label">Hora</label><input type="time" class="form-control" id="p_hora"></div>
+          <div class="col-6 col-md-3"><label class="form-label">Tiempo obs. / época</label><input type="text" class="form-control" id="p_tobs" placeholder="ej. 5 min / 1995.4"></div>
+
+          <div class="col-6 col-md-3"><label class="form-label req">Norte N (m)</label><input type="number" step="0.001" class="form-control num" id="p_n"></div>
+          <div class="col-6 col-md-3"><label class="form-label req">Este E (m)</label><input type="number" step="0.001" class="form-control num" id="p_e"></div>
+          <div class="col-6 col-md-3"><label class="form-label">Altura elip. h (m)</label><input type="number" step="0.001" class="form-control num" id="p_h"></div>
+          <div class="col-6 col-md-3"><label class="form-label">Incertidumbre (m)</label><input type="number" step="0.001" class="form-control num" id="p_inc"></div>
+
+          <div class="col-4 col-md-2"><label class="form-label">N° sat.</label><input type="number" class="form-control num" id="p_sat"></div>
+          <div class="col-4 col-md-2"><label class="form-label">PDOP</label><input type="number" step="0.1" class="form-control num" id="p_pdop"></div>
+          <div class="col-4 col-md-2"><label class="form-label">Solución</label>
+            <select class="form-select" id="p_sol"><option>Fixed</option><option>Float</option><option>DGPS</option><option>Autónoma</option></select>
+          </div>
+          <div class="col-6 col-md-2"><label class="form-label">Fiable</label>
+            <select class="form-select" id="p_fiable"><option>Sí</option><option>No</option></select>
+          </div>
+          <div class="col-6 col-md-4"><label class="form-label">Descripción</label><input type="text" class="form-control" id="p_desc" placeholder="ej. esquina cerca, mojón..."></div>
+        </div>
+        <div class="d-flex gap-2 mt-3">
+          <button class="btn btn-accent btn-sm" id="addGnss"><i class="bi bi-plus-lg"></i> <span id="addGnssTxt">Agregar punto</span></button>
+          <button class="btn btn-outline-secondary btn-sm" id="clearGnssForm"><i class="bi bi-eraser"></i> Limpiar campos</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div class="ix"><i class="bi bi-table"></i></div>
+        <div><h2>Puntos registrados (GNSS)</h2><div class="sub">Toque <i class="bi bi-pencil"></i> para editar o <i class="bi bi-trash"></i> para eliminar</div></div>
+      </div>
+      <div class="panel-body p-0">
+        <div class="table-responsive">
+          <table class="table table-sm tbl-pts mb-0 align-middle">
+            <thead><tr>
+              <th>ID</th><th>Tipo</th><th>Norte</th><th>Este</th><th>h</th><th>Inc.</th>
+              <th>Sat</th><th>PDOP</th><th>Sol.</th><th>Fiable</th><th>Hora</th><th>Descripción</th><th></th>
+            </tr></thead>
+            <tbody id="bodyGnss"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="emptyGnss"><i class="bi bi-inbox"></i><div>Aún no hay puntos GNSS registrados.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CARTERA ÓPTICA ============ -->
+  <div class="tab-pane fade" id="t-opt">
+    <div class="panel mb-3">
+      <div class="panel-head"><div class="ix"><i class="bi bi-bullseye"></i></div>
+        <div><h2>Cartera óptica — Estación total / teodolito</h2><div class="sub">Radiación: estación, visado, ángulos y distancias</div></div>
+      </div>
+      <div class="panel-body">
+        <div class="section-tag">Equipo</div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-5"><label class="form-label">Equipo (marca/modelo)</label><input type="text" class="form-control" id="oe_equipo"></div>
+          <div class="col-md-3"><label class="form-label">Serie</label><input type="text" class="form-control mono" id="oe_serie"></div>
+          <div class="col-md-4"><label class="form-label">Unidad angular</label>
+            <select class="form-select" id="oe_unidad"><option>Sexagesimal (G°M'S")</option><option>Grados decimales</option><option>Gon / grados centesimales</option></select>
+          </div>
+        </div>
+
+        <div class="section-tag">Nueva observación</div>
+        <div class="row g-2">
+          <div class="col-6 col-md-2"><label class="form-label req">Est. (E)</label><input type="text" class="form-control num" id="o_est"></div>
+          <div class="col-6 col-md-2"><label class="form-label">Alt. instr. hi (m)</label><input type="number" step="0.001" class="form-control num" id="o_hi"></div>
+          <div class="col-6 col-md-2"><label class="form-label req">Visado (PV)</label><input type="text" class="form-control num" id="o_pv"></div>
+          <div class="col-6 col-md-2"><label class="form-label">Alt. prisma hp (m)</label><input type="number" step="0.001" class="form-control num" id="o_hp"></div>
+          <div class="col-6 col-md-2"><label class="form-label">Tipo punto</label>
+            <select class="form-select" id="o_tipo"><option>Punto lindero</option><option>Detalle</option><option>Control</option><option>Construcción</option></select>
+          </div>
+          <div class="col-6 col-md-2"><label class="form-label">Serie / lectura</label><input type="text" class="form-control num" id="o_serie2" placeholder="Directa/Invertida"></div>
+
+          <div class="col-6 col-md-3"><label class="form-label">Áng. horizontal</label><input type="text" class="form-control num" id="o_ah" placeholder="GG°MM'SS&quot;"></div>
+          <div class="col-6 col-md-3"><label class="form-label">Áng. vertical / cenital</label><input type="text" class="form-control num" id="o_av" placeholder="GG°MM'SS&quot;"></div>
+          <div class="col-6 col-md-3"><label class="form-label">Dist. inclinada (m)</label><input type="number" step="0.001" class="form-control num" id="o_di"></div>
+          <div class="col-6 col-md-3"><label class="form-label">Dist. horizontal (m)</label><input type="number" step="0.001" class="form-control num" id="o_dh"></div>
+
+          <div class="col-6 col-md-3"><label class="form-label">Norte N (m)</label><input type="number" step="0.001" class="form-control num" id="o_n"></div>
+          <div class="col-6 col-md-3"><label class="form-label">Este E (m)</label><input type="number" step="0.001" class="form-control num" id="o_e"></div>
+          <div class="col-6 col-md-3"><label class="form-label">Cota (m)</label><input type="number" step="0.001" class="form-control num" id="o_cota"></div>
+          <div class="col-6 col-md-3"><label class="form-label">Descripción</label><input type="text" class="form-control" id="o_desc"></div>
+        </div>
+        <div class="d-flex gap-2 mt-3">
+          <button class="btn btn-accent btn-sm" id="addOpt"><i class="bi bi-plus-lg"></i> <span id="addOptTxt">Agregar observación</span></button>
+          <button class="btn btn-outline-secondary btn-sm" id="clearOptForm"><i class="bi bi-eraser"></i> Limpiar campos</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div class="ix"><i class="bi bi-table"></i></div>
+        <div><h2>Observaciones registradas (óptica)</h2><div class="sub">Toque <i class="bi bi-pencil"></i> para editar o <i class="bi bi-trash"></i> para eliminar</div></div>
+      </div>
+      <div class="panel-body p-0">
+        <div class="table-responsive">
+          <table class="table table-sm tbl-pts mb-0 align-middle">
+            <thead><tr>
+              <th>Est</th><th>hi</th><th>PV</th><th>hp</th><th>Tipo</th><th>Áng. H</th><th>Áng. V</th>
+              <th>D.incl</th><th>D.horiz</th><th>Norte</th><th>Este</th><th>Cota</th><th>Descripción</th><th></th>
+            </tr></thead>
+            <tbody id="bodyOpt"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="emptyOpt"><i class="bi bi-inbox"></i><div>Aún no hay observaciones ópticas registradas.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ EXPORTAR ============ -->
+  <div class="tab-pane fade" id="t-exp">
+    <div class="panel mb-3">
+      <div class="panel-head"><div class="ix"><i class="bi bi-clipboard-check"></i></div>
+        <div><h2>Resumen del levantamiento</h2><div class="sub">Verifique antes de exportar</div></div>
+      </div>
+      <div class="panel-body">
+        <div class="row g-2">
+          <div class="col-12 col-md-4"><div class="stat-chip"><span class="n" id="sGnss">0</span><span class="l">Puntos GNSS</span></div></div>
+          <div class="col-6 col-md-4"><div class="stat-chip"><span class="n" id="sOpt">0</span><span class="l">Obs. ópticas</span></div></div>
+          <div class="col-6 col-md-4"><div class="stat-chip"><span class="n" id="sFiables">0</span><span class="l">Linderos fiables</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div class="ix"><i class="bi bi-download"></i></div>
+        <div><h2>Generar documentos</h2><div class="sub">Para completar después con el informe topográfico</div></div>
+      </div>
+      <div class="panel-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label d-block mb-1">¿Qué incluir en el Word?</label>
+            <div class="btn-group w-100 mb-2" role="group">
+              <input type="radio" class="btn-check" name="wscope" id="ws_both" value="both" checked>
+              <label class="btn btn-outline-steel" for="ws_both">Ambas carteras</label>
+              <input type="radio" class="btn-check" name="wscope" id="ws_gnss" value="gnss">
+              <label class="btn btn-outline-steel" for="ws_gnss">Solo GNSS</label>
+              <input type="radio" class="btn-check" name="wscope" id="ws_opt" value="opt">
+              <label class="btn btn-outline-steel" for="ws_opt">Solo óptica</label>
+            </div>
+            <button class="btn btn-steel w-100 py-2" id="btnWord">
+              <i class="bi bi-file-earmark-word fs-5"></i> Exportar a Word (.doc)
+            </button>
+            <span class="hint">Incluye la(s) cartera(s) seleccionada(s) + plantilla de informe topográfico lista para editar en Word.</span>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-accent w-100 py-2" id="btnCsv">
+              <i class="bi bi-filetype-csv fs-5"></i> Exportar puntos a CSV
+            </button>
+            <span class="hint">GNSS y óptica en archivos separados, listos para importar a software de procesamiento o SIG.</span>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-outline-dark w-100 py-2" id="btnSave">
+              <i class="bi bi-save fs-5"></i> Guardar proyecto (.json)
+            </button>
+            <span class="hint">Respaldo completo y editable de todo el levantamiento (úselo entre jornadas).</span>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-outline-dark w-100 py-2" id="btnLoad">
+              <i class="bi bi-folder2-open fs-5"></i> Cargar proyecto (.json)
+            </button>
+            <input type="file" id="fileLoad" accept=".json" hidden>
+            <span class="hint">Recupera un proyecto guardado para continuar la captura.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+
+<footer class="app-footer">
+  <div><strong>TopCad</strong> · Topografía y Dibujos</div>
+  <div>Cartera de Campo Digital — Res. 643 de 2018 (IGAC) · Creado por <strong>Carlos M. Gutiérrez G.</strong></div>
+</footer>
+
+<div class="toast-mini" id="toast"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+/* ============ ESTADO (en memoria) ============ */
+let gnss = [];      // puntos GNSS
+let opt  = [];      // observaciones ópticas
+let editGnss = -1;  // índice en edición
+let editOpt  = -1;
+
+const $ = id => document.getElementById(id);
+const val = id => ($(id) ? $(id).value.trim() : '');
+const esc = s => (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function toast(msg){
+  const t=$('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ============ GNSS ============ */
+const gnssFields=['p_id','p_tipo','p_ha','p_hora','p_tobs','p_n','p_e','p_h','p_inc','p_sat','p_pdop','p_sol','p_fiable','p_desc'];
+
+$('addGnss').onclick=()=>{
+  if(!val('p_id')||!val('p_n')||!val('p_e')){toast('ID, Norte y Este son obligatorios');return;}
+  const o={id:val('p_id'),tipo:val('p_tipo'),ha:val('p_ha'),hora:val('p_hora'),tobs:val('p_tobs'),
+    n:val('p_n'),e:val('p_e'),h:val('p_h'),inc:val('p_inc'),sat:val('p_sat'),pdop:val('p_pdop'),
+    sol:val('p_sol'),fiable:val('p_fiable'),desc:val('p_desc')};
+  if(editGnss>=0){gnss[editGnss]=o;editGnss=-1;$('addGnssTxt').textContent='Agregar punto';toast('Punto actualizado');}
+  else{gnss.push(o);toast('Punto agregado');}
+  clearGnssForm(); renderGnss();
+};
+function clearGnssForm(){gnssFields.forEach(f=>{const el=$(f); if(el.tagName==='SELECT')el.selectedIndex=0; else el.value='';});}
+$('clearGnssForm').onclick=()=>{clearGnssForm();editGnss=-1;$('addGnssTxt').textContent='Agregar punto';};
+
+function tipoColor(t){
+  if(/lindero/i.test(t))return 'background:#fde2cf;color:#a63a0c';
+  if(/control|vértice|vertice/i.test(t))return 'background:#d3e3ec;color:#2f4858';
+  if(/construc/i.test(t))return 'background:#e3dcef;color:#5b3d8c';
+  return 'background:#e7eaec;color:#566';
+}
+function renderGnss(){
+  const b=$('bodyGnss'); b.innerHTML='';
+  $('emptyGnss').style.display = gnss.length? 'none':'block';
+  gnss.forEach((p,i)=>{
+    const fia = p.fiable==='Sí'
+      ? '<span class="type-pill" style="background:#d3f0d8;color:#2b8a3e">Sí</span>'
+      : '<span class="type-pill" style="background:#f1dede;color:#b33">No</span>';
+    b.insertAdjacentHTML('beforeend',`<tr>
+      <td><strong>${esc(p.id)}</strong></td>
+      <td><span class="type-pill" style="${tipoColor(p.tipo)}">${esc(p.tipo)}</span></td>
+      <td>${esc(p.n)}</td><td>${esc(p.e)}</td><td>${esc(p.h)||'—'}</td><td>${esc(p.inc)||'—'}</td>
+      <td>${esc(p.sat)||'—'}</td><td>${esc(p.pdop)||'—'}</td><td>${esc(p.sol)}</td>
+      <td>${fia}</td><td>${esc(p.hora)||'—'}</td><td style="white-space:normal;max-width:160px">${esc(p.desc)||'—'}</td>
+      <td class="text-nowrap">
+        <button class="btn btn-sm btn-link p-0 me-2 text-secondary" onclick="loadGnss(${i})"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-sm btn-link p-0 text-danger" onclick="delGnss(${i})"><i class="bi bi-trash"></i></button>
+      </td></tr>`);
+  });
+  updateCounts();
+}
+window.loadGnss=i=>{const p=gnss[i];
+  $('p_id').value=p.id;$('p_tipo').value=p.tipo;$('p_ha').value=p.ha;$('p_hora').value=p.hora;$('p_tobs').value=p.tobs;
+  $('p_n').value=p.n;$('p_e').value=p.e;$('p_h').value=p.h;$('p_inc').value=p.inc;$('p_sat').value=p.sat;
+  $('p_pdop').value=p.pdop;$('p_sol').value=p.sol;$('p_fiable').value=p.fiable;$('p_desc').value=p.desc;
+  editGnss=i;$('addGnssTxt').textContent='Guardar cambios';window.scrollTo({top:120,behavior:'smooth'});
+};
+window.delGnss=i=>{if(confirm('¿Eliminar punto '+gnss[i].id+'?')){gnss.splice(i,1);renderGnss();}};
+
+/* ============ ÓPTICA ============ */
+const optFields=['o_est','o_hi','o_pv','o_hp','o_tipo','o_serie2','o_ah','o_av','o_di','o_dh','o_n','o_e','o_cota','o_desc'];
+$('addOpt').onclick=()=>{
+  if(!val('o_est')||!val('o_pv')){toast('Estación y Punto visado son obligatorios');return;}
+  const o={est:val('o_est'),hi:val('o_hi'),pv:val('o_pv'),hp:val('o_hp'),tipo:val('o_tipo'),serie:val('o_serie2'),
+    ah:val('o_ah'),av:val('o_av'),di:val('o_di'),dh:val('o_dh'),n:val('o_n'),e:val('o_e'),cota:val('o_cota'),desc:val('o_desc')};
+  if(editOpt>=0){opt[editOpt]=o;editOpt=-1;$('addOptTxt').textContent='Agregar observación';toast('Observación actualizada');}
+  else{opt.push(o);toast('Observación agregada');}
+  clearOptForm(); renderOpt();
+};
+function clearOptForm(){optFields.forEach(f=>{const el=$(f); if(el.tagName==='SELECT')el.selectedIndex=0; else el.value='';});}
+$('clearOptForm').onclick=()=>{clearOptForm();editOpt=-1;$('addOptTxt').textContent='Agregar observación';};
+
+function renderOpt(){
+  const b=$('bodyOpt'); b.innerHTML='';
+  $('emptyOpt').style.display = opt.length? 'none':'block';
+  opt.forEach((p,i)=>{
+    b.insertAdjacentHTML('beforeend',`<tr>
+      <td><strong>${esc(p.est)}</strong></td><td>${esc(p.hi)||'—'}</td><td>${esc(p.pv)}</td><td>${esc(p.hp)||'—'}</td>
+      <td><span class="type-pill" style="${tipoColor(p.tipo)}">${esc(p.tipo)}</span></td>
+      <td>${esc(p.ah)||'—'}</td><td>${esc(p.av)||'—'}</td><td>${esc(p.di)||'—'}</td><td>${esc(p.dh)||'—'}</td>
+      <td>${esc(p.n)||'—'}</td><td>${esc(p.e)||'—'}</td><td>${esc(p.cota)||'—'}</td>
+      <td style="white-space:normal;max-width:140px">${esc(p.desc)||'—'}</td>
+      <td class="text-nowrap">
+        <button class="btn btn-sm btn-link p-0 me-2 text-secondary" onclick="loadOpt(${i})"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-sm btn-link p-0 text-danger" onclick="delOpt(${i})"><i class="bi bi-trash"></i></button>
+      </td></tr>`);
+  });
+  updateCounts();
+}
+window.loadOpt=i=>{const p=opt[i];
+  $('o_est').value=p.est;$('o_hi').value=p.hi;$('o_pv').value=p.pv;$('o_hp').value=p.hp;$('o_tipo').value=p.tipo;
+  $('o_serie2').value=p.serie;$('o_ah').value=p.ah;$('o_av').value=p.av;$('o_di').value=p.di;$('o_dh').value=p.dh;
+  $('o_n').value=p.n;$('o_e').value=p.e;$('o_cota').value=p.cota;$('o_desc').value=p.desc;
+  editOpt=i;$('addOptTxt').textContent='Guardar cambios';window.scrollTo({top:120,behavior:'smooth'});
+};
+window.delOpt=i=>{if(confirm('¿Eliminar observación '+opt[i].est+'→'+opt[i].pv+'?')){opt.splice(i,1);renderOpt();}};
+
+/* ============ CONTADORES ============ */
+function updateCounts(){
+  $('cntGnss').textContent=gnss.length; $('cntOpt').textContent=opt.length;
+  $('sGnss').textContent=gnss.length; $('sOpt').textContent=opt.length;
+  const fiables=gnss.filter(p=>/lindero/i.test(p.tipo)&&p.fiable==='Sí').length;
+  $('sFiables').textContent=fiables;
+}
+
+/* ============ UTILIDAD DESCARGA ============ */
+function download(filename,content,type){
+  const blob=new Blob([content],{type});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function generales(){
+  return {ge_equipo:val('ge_equipo'),ge_serie:val('ge_serie'),ge_metodo:val('ge_metodo'),ge_base:val('ge_base'),
+    oe_equipo:val('oe_equipo'),oe_serie:val('oe_serie'),oe_unidad:val('oe_unidad')};
+}
+
+/* ============ EXPORTAR WORD ============ */
+$('btnWord').onclick=()=>{
+  const g=generales();
+  const fechaDoc=new Date().toLocaleDateString('es-CO');
+  const kv=(k,v)=>`<tr><td class="k">${esc(k)}</td><td>${esc(v)||'&nbsp;'}</td></tr>`;
+
+  let gnssRows = gnss.length ? gnss.map((p,i)=>`<tr>
+    <td>${i+1}</td><td>${esc(p.id)}</td><td>${esc(p.tipo)}</td><td>${esc(p.n)}</td><td>${esc(p.e)}</td>
+    <td>${esc(p.h)}</td><td>${esc(p.inc)}</td><td>${esc(p.sat)}</td><td>${esc(p.pdop)}</td>
+    <td>${esc(p.sol)}</td><td>${esc(p.fiable)}</td><td>${esc(p.hora)}</td><td>${esc(p.desc)}</td></tr>`).join('')
+    : `<tr><td colspan="13" style="text-align:center;color:#888">Sin registros</td></tr>`;
+
+  let optRows = opt.length ? opt.map((p,i)=>`<tr>
+    <td>${i+1}</td><td>${esc(p.est)}</td><td>${esc(p.hi)}</td><td>${esc(p.pv)}</td><td>${esc(p.hp)}</td>
+    <td>${esc(p.tipo)}</td><td>${esc(p.ah)}</td><td>${esc(p.av)}</td><td>${esc(p.di)}</td><td>${esc(p.dh)}</td>
+    <td>${esc(p.n)}</td><td>${esc(p.e)}</td><td>${esc(p.cota)}</td><td>${esc(p.desc)}</td></tr>`).join('')
+    : `<tr><td colspan="14" style="text-align:center;color:#888">Sin registros</td></tr>`;
+
+  const blank='&nbsp;<br>&nbsp;<br>&nbsp;';
+
+  const scope = (document.querySelector('input[name="wscope"]:checked')||{}).value || 'both';
+  const incGnss = scope==='both' || scope==='gnss';
+  const incOpt  = scope==='both' || scope==='opt';
+
+  let num=0; const carteras=[];
+  if(incGnss){ num++; carteras.push(`
+  <h2>${num}. Cartera GNSS</h2>
+  <table class="kv">
+    ${kv('Receptor (marca/modelo)',g.ge_equipo)}${kv('Serie',g.ge_serie)}${kv('Método',g.ge_metodo)}${kv('Base / NTRIP',g.ge_base)}
+  </table>
+  <table class="data">
+    <thead><tr><th>#</th><th>ID</th><th>Tipo</th><th>Norte (m)</th><th>Este (m)</th><th>h (m)</th><th>Inc.</th>
+    <th>Sat</th><th>PDOP</th><th>Sol.</th><th>Fiable</th><th>Hora</th><th>Descripción</th></tr></thead>
+    <tbody>${gnssRows}</tbody>
+  </table>`); }
+  if(incOpt){ num++; carteras.push(`
+  <h2>${num}. Cartera óptica — Estación total / teodolito</h2>
+  <table class="kv">
+    ${kv('Equipo (marca/modelo)',g.oe_equipo)}${kv('Serie',g.oe_serie)}${kv('Unidad angular',g.oe_unidad)}
+  </table>
+  <table class="data">
+    <thead><tr><th>#</th><th>Est</th><th>hi</th><th>PV</th><th>hp</th><th>Tipo</th><th>Áng. H</th><th>Áng. V</th>
+    <th>D.incl</th><th>D.horiz</th><th>Norte</th><th>Este</th><th>Cota</th><th>Descripción</th></tr></thead>
+    <tbody>${optRows}</tbody>
+  </table>`); }
+
+  const subtitulo = scope==='gnss' ? 'Cartera GNSS' : scope==='opt' ? 'Cartera óptica' : 'Carteras GNSS y óptica';
+
+  const body=`
+  <h1>CARTERA DE CAMPO — LEVANTAMIENTO PLANIMÉTRICO PREDIAL</h1>
+  <p class="cite">${subtitulo} · Especificaciones técnicas — Resolución 643 de 2018 (IGAC). Documento generado el ${fechaDoc}.</p>
+  ${carteras.join('\n')}
+
+  <div class="pagebreak"></div>
+  <h1>INFORME TOPOGRÁFICO</h1>
+  <p class="cite">Plantilla para completar en oficina con base en la cartera de campo anterior.</p>
+
+  <h2>1. Objeto</h2><p>${blank}</p>
+  <h2>2. Localización</h2><p>${blank}</p>
+  <h2>3. Marco legal y normativo</h2><p>Levantamiento ejecutado conforme a la Resolución 643 de 2018 del IGAC y demás normas catastrales vigentes.<br>&nbsp;</p>
+  <h2>4. Metodología</h2><p>${blank}</p>
+  <h2>5. Equipos utilizados y certificados de calibración</h2><p>${blank}</p>
+  <h2>6. Sistema de referencia y enlace geodésico</h2><p>${blank}</p>
+  <h2>7. Descripción del levantamiento y control de calidad</h2>
+  <p>Exactitud posicional absoluta y relativa según el anexo aplicable. Verificación de medición controlada y fiabilidad de los puntos lindero.<br>${blank}</p>
+  <h2>8. Resultados (cuadro de áreas, linderos y coordenadas)</h2><p>${blank}<br>${blank}</p>
+  <h2>9. Observaciones</h2><p>${blank}</p>
+  <h2>10. Conclusiones</h2><p>${blank}</p>
+  <h2>11. Anexos</h2><p>Plano topográfico, registro fotográfico, certificados, actas de colindancia.<br>&nbsp;</p>
+
+  <table class="firmas">
+    <tr><td>______________________________<br>Elaboró (Topógrafo)<br>&nbsp;<br>M.P. ____________</td>
+        <td>______________________________<br>Revisó<br>&nbsp;</td>
+        <td>______________________________<br>Aprobó<br>&nbsp;</td></tr>
+  </table>
+  `;
+
+  const html=`<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+  <head><meta charset='utf-8'>
+  <style>
+    @page{size:21.59cm 27.94cm; margin:2cm 1.8cm;}
+    body{font-family:'Calibri',sans-serif;font-size:10.5pt;color:#1a1d21;}
+    h1{font-size:14pt;color:#2f4858;border-bottom:2px solid #d9480f;padding-bottom:4px;}
+    h2{font-size:11.5pt;color:#a63a0c;margin-top:14px;border-left:3px solid #d9480f;padding-left:6px;}
+    p.cite{font-size:8.5pt;color:#666;font-style:italic;}
+    table{border-collapse:collapse;width:100%;margin:6px 0;}
+    table.kv td{border:1px solid #cdd5d8;padding:3px 6px;font-size:9.5pt;vertical-align:top;}
+    table.kv td.k{background:#eef2f3;font-weight:bold;width:32%;color:#2f4858;}
+    table.data th{background:#2f4858;color:#fff;border:1px solid #2f4858;padding:3px;font-size:7.5pt;}
+    table.data td{border:1px solid #cdd5d8;padding:2px 3px;font-size:7.5pt;text-align:center;font-family:'Consolas',monospace;}
+    table.firmas{margin-top:40px;}
+    table.firmas td{text-align:center;font-size:9pt;padding:8px;width:33%;}
+    .pagebreak{page-break-before:always;}
+  </style></head><body>${body}</body></html>`;
+
+  const npn=new Date().toISOString().slice(0,10);
+  const suf = scope==='gnss' ? 'GNSS' : scope==='opt' ? 'Optica' : 'GNSS-Optica';
+  download(`Cartera_Res643_${suf}_${npn}.doc`, '\ufeff'+html, 'application/msword');
+  toast('Documento Word generado');
+};
+
+/* ============ EXPORTAR CSV ============ */
+$('btnCsv').onclick=()=>{
+  const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
+  if(gnss.length){
+    const head=['ID','Tipo','Norte','Este','h_elip','Incertidumbre','Sat','PDOP','Solucion','Fiable','Hora','TiempoObs','AltAntena','Descripcion'];
+    const rows=gnss.map(p=>[p.id,p.tipo,p.n,p.e,p.h,p.inc,p.sat,p.pdop,p.sol,p.fiable,p.hora,p.tobs,p.ha,p.desc].map(q).join(','));
+    download('puntos_GNSS.csv','\ufeff'+head.join(',')+'\n'+rows.join('\n'),'text/csv');
+  }
+  if(opt.length){
+    const head=['Estacion','hi','Visado','hp','Tipo','AngHoriz','AngVert','DistIncl','DistHoriz','Norte','Este','Cota','Serie','Descripcion'];
+    const rows=opt.map(p=>[p.est,p.hi,p.pv,p.hp,p.tipo,p.ah,p.av,p.di,p.dh,p.n,p.e,p.cota,p.serie,p.desc].map(q).join(','));
+    download('observaciones_opticas.csv','\ufeff'+head.join(',')+'\n'+rows.join('\n'),'text/csv');
+  }
+  if(!gnss.length&&!opt.length){toast('No hay puntos para exportar');return;}
+  toast('CSV generado');
+};
+
+/* ============ GUARDAR / CARGAR JSON ============ */
+$('btnSave').onclick=()=>{
+  const data={app:'CarteraRes643',version:1,fecha:new Date().toISOString(),generales:generales(),gnss,opt};
+  const npn=new Date().toISOString().slice(0,10);
+  download(`proyecto_${npn}.json`, JSON.stringify(data,null,2), 'application/json');
+  toast('Proyecto guardado');
+};
+$('btnLoad').onclick=()=>$('fileLoad').click();
+$('fileLoad').onchange=e=>{
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(d.generales){const g=d.generales;
+        const map={ge_equipo:'ge_equipo',ge_serie:'ge_serie',ge_metodo:'ge_metodo',ge_base:'ge_base',
+          oe_equipo:'oe_equipo',oe_serie:'oe_serie',oe_unidad:'oe_unidad'};
+        Object.keys(map).forEach(id=>{if($(id)&&g[map[id]]!=null)$(id).value=g[map[id]];});
+      }
+      gnss=d.gnss||[]; opt=d.opt||[];
+      renderGnss(); renderOpt(); updateCounts();
+      toast('Proyecto cargado');
+    }catch(err){toast('Archivo no válido');}
+  };
+  r.readAsText(f); e.target.value='';
+};
+
+/* ============ INIT ============ */
+renderGnss(); renderOpt(); updateCounts();
+</script>
+</body>
+</html>
